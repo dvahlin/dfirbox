@@ -1,0 +1,30 @@
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+    <ul class="flashes">
+    {% for category, message in messages %}
+        <li class="{{ category }}">{{ message }}</li>
+    {% endfor %}
+    </ul>
+{% endif %}
+{% endwith %}
+
+
+{% extends "base.html" %}
+
+{% block title %}Compare two files{% endblock %}
+
+{% block content %}
+    <h1 class="text-center">Compare two files</h1>
+    <form action="{{ url_for('compare_files') }}" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="file1" class="form-label">File 1</label>
+            <input type="file" class="form-control" id="file1" name="file1" required>
+        </div>
+        <div class="mb-3">
+            <label for="file2" class="form-label">File 2</label>
+            <input type="file" class="form-control" id="file2" name="file2" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Compare</button>
+    </form>
+{% endblock %}
+

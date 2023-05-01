@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %} Compare File Hashes {% endblock %}
+
+{% block content %}
+    <h1>Compare File Hashes</h1>
+    <p>Select two files containing file paths and hashes to compare.</p>
+    <p>example: find /etc -type f -exec sha256sum {} \; > baseline_hashes.txt</p>
+    <form action="{{ url_for('compare_file_hashes') }}" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="file1">Baseline File:</label>
+            <input type="file" class="form-control-file" id="file1" name="file1" required>
+        </div>
+        <div class="form-group">
+            <label for="file2">Victim File:</label>
+            <input type="file" class="form-control-file" id="file2" name="file2" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Compare Hashes</button>
+    </form>
+{% endblock %}
+

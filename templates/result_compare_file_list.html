@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %} Compare File List Results {% endblock %}
+
+{% block content %}
+    <h1>Compare File List Results</h1>
+
+    <h3>Not Matching Path:</h3>
+    <ul>
+    {% for not_matching in diff.not_matching %}
+        <li class="diff-del">{{ not_matching }}</li>
+    {% endfor %}
+    </ul>
+
+    <a href="{{ url_for('compare_file_list') }}" class="btn btn-primary">Compare Another File List</a>
+{% endblock %}
+

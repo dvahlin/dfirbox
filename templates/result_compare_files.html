@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Compare two files{% endblock %}
+
+{% block content %}
+    <h1 class="text-center">Compare two files</h1>
+
+    <div class="row">
+        <div class="col">
+            <h3>File 1</h3>
+            <pre>
+{% for line in diff %}
+    {% if line.startswith('-') %}
+        <span style="background-color: #ffd6d6">{{ line }}</span>
+    {% else %}
+        {{ line }}
+    {% endif %}
+{% endfor %}
+            </pre>
+        </div>
+        <div class="col">
+            <h3>File 2</h3>
+            <pre>
+{% for line in diff %}
+    {% if line.startswith('+') %}
+        <span style="background-color: #d6ffd6">{{ line }}</span>
+    {% else %}
+        {# Skip line #}
+    {% endif %}
+{% endfor %}
+            </pre>
+        </div>
+    </div>
+    <a href="{{ url_for('compare_files') }}" class="btn btn-primary mt-3">Back to Compare</a>
+{% endblock %}
+

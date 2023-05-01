@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}LDIF Comparison Results{% endblock %}
+
+{% block content %}
+    <h1>LDIF Comparison Results</h1>
+
+    <h2>Entries with Changes</h2>
+    {% set unique_dns = [] %}
+    {% for entry in added_entries + removed_entries %}
+        {% if entry['dn'] not in unique_dns %}
+            {% set _ = unique_dns.append(entry['dn']) %}
+        {% endif %}
+    {% endfor %}
+
+    {% if unique_dns %}
+        <ul>
+        {% for dn in unique_dns %}
+            <li><strong>{{ dn }}</strong></li>
+            <ul>
+            {% for entry in added_entries %}
+                {% if entry['dn'] == dn %}
+                    <li>Added attributes:</li>
+                    <ul>
+                    {% for attribute, values in entry.items() if attribute != 'dn' %}
+                        <li>{{ attribute }}: {% if values is iterable and values is not string %}{{ values|join(', ') }}{% else %}{{ values }}{% endif %}</li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endfor %}
+
+            {% for entry in removed_entries %}
+                {% if entry['dn'] == dn %}
+                    <li>Removed attributes:</li>
+                    <ul>
+                    {% for attribute, values in entry.items() if attribute != 'dn' %}
+                        <li>{{ attribute }}: {% if values is iterable and values is not string %}{{ values|join(', ') }}{% else %}{{ values }}{% endif %}</li>
+                    {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endfor %}
+            </ul>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No changes detected.</p>
+    {% endif %}
+
+    <a href="{{ url_for('upload_ldif') }}" class="btn btn-primary mt-3">Back to Upload</a>
+{% endblock %}
+

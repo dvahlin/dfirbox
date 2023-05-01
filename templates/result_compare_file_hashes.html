@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %} Compare File Hashes Results {% endblock %}
+
+{% block content %}
+    <h1>Compare File Hashes Results</h1>
+    <h3>Files with Mismatched Hashes:</h3>
+    {% if hash_mismatch %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">File Name</th>
+                    <th scope="col">Baseline Hash</th>
+                    <th scope="col">Victim Hash</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for file_name, baseline_hash, victim_hash in hash_mismatch %}
+                <tr>
+                    <td>{{ file_name }}</td>
+                    <td>{{ baseline_hash }}</td>
+                    <td>{{ victim_hash }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No files with mismatched hashes found.</p>
+    {% endif %}
+    <a href="{{ url_for('compare_file_hashes') }}" class="btn btn-primary">Back to Hash Comparison</a>
+{% endblock %}
+

@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}PowerShell Scripts{% endblock %}
+
+{% block content %}
+  <h1 class="text-center">PowerShell Scripts</h1>
+  
+  <h2>Script 1: Gen-filelist</h2>
+  <p>This script generates a list of files with full path on the local computer.</p>
+  <pre><code class="language-powershell">
+  $dirs = @("C:\Windows", "C:\Program Files", "C:\Program Files (x86)", "C:\Users")
+  $outputFile = "baseline.txt"
+  
+  # Remove output file if it already exists
+  if (Test-Path $outputFile) {
+      Remove-Item $outputFile -Force
+  }
+  
+  foreach ($dir in $dirs) {
+      if (Test-Path $dir) {
+          Get-ChildItem -Path $dir -Recurse -File -Force -ErrorAction SilentlyContinue | ForEach-Object {
+              Add-Content -Path $outputFile -Value $_.FullName
+          }
+      }
+  }
+  </code></pre>
+  
+  <h2>Script 2: Gen-filehash</h2>
+  <p>This script generates a csv file containing hashes and filenames</p>
+  <pre><code class="language-powershell">
+  $directories = "C:\Program Files", "C:\Program Files (x86)", "C:\Users"
+  $outputFile = "C:\Users\Administrator\baseline_hashes.csv"
+  
+  # Get the file hashes for the specified directories
+  $hashes = Get-ChildItem $directories -Recurse -File | ForEach-Object {
+      Get-FileHash $_.FullName | Select-Object @{Name='FilePath';Expression={$_.Path}}, Hash
+  }
+  
+  # Export the results to a CSV file
+  $hashes | Export-Csv -Path $outputFile -NoTypeInformation
+
+  </code></pre>
+  
+  <h2>Script 3: Hunt for processes</h2>
+  <p>This script checks for processes running in wierd places</p>
+  <pre><code class="language-powershell">
+  $locations = @("C:\\ProgramData", "C:\\Temp", "C:\\Users\\Public", "C:\\Users", "C:\\Users*\\AppData", "C:\\Users*\\Desktop")
+  
+  $processes = Get-CimInstance Win32_Process
+  
+  foreach ($process in $processes) {
+      $path = $process.ExecutablePath
+      $name = $process.Name
+  
+      foreach ($location in $locations) {
+          $location = $location.Replace('*', '.*')
+          if ($path -match "^$location") {
+              Write-Host "Process: $name"
+              Write-Host "Path: $path"
+              Write-Host "-----------------------"
+              break
+          }
+      }
+  }
+  </code></pre>
+{% endblock %}

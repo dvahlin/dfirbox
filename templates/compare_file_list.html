@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Compare file lists{% endblock %}
+
+{% block content %}
+    <h1 class="text-center">Compare file lists</h1>
+    <form action="{{ url_for('compare_file_list') }}" method="post" enctype="multipart/form-data">
+        <div class="mb-3">
+            <label for="file1" class="form-label">Baseline</label>
+            <input type="file" class="form-control" id="file1" name="file1" required>
+        </div>
+        <div class="mb-3">
+            <label for="file2" class="form-label">Victim</label>
+            <input type="file" class="form-control" id="file2" name="file2" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Compare</button>
+    </form>
+{% endblock %}

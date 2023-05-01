@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block title %}File List Comparison Result{% endblock %}
+
+{% block content %}
+    <h1 class="text-center">File List Comparison Result</h1>
+    {% if diff is defined %}
+        <h2>Added Files:</h2>
+        <ul>
+            {% for file in diff.added %}
+                <li class="text-success">{{ file }}</li>
+            {% endfor %}
+        </ul>
+        <h2>Removed Files:</h2>
+        <ul>
+            {% for file in diff.removed %}
+                <li class="text-danger">{{ file }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+{% endblock %}
+

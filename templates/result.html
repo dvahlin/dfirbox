@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}File Comparison Result{% endblock %}
+
+{% block content %}
+    <h1 class="text-center">File Comparison Result</h1>
+    {% if file_contents is defined %}
+    <div class="row">
+        <div class="col">
+            <h2>File 1</h2>
+            <pre>{{ file_contents[0] }}</pre>
+        </div>
+        <div class="col">
+            <h2>File 2</h2>
+            <pre>{{ file_contents[1] }}</pre>
+        </div>
+    </div>
+    <div id="diff"></div>
+      <script src="{{ url_for('static', filename='diff_match_patch.js') }}"></script>
+  <script>
+    function computeDiff(text1, text2) {
+      const dmp = new diff_match_patch();
+      const diffs = dmp.diff_main(text1, text2);
+      dmp.diff_cleanupSemantic(diffs);
+      const diffHTML = dmp.diff_prettyHtml(diffs);
+      document.getElementById('diffResult').innerHTML = diffHTML;
+    }
+    window.onload = function() {
+      computeDiff({{ file_contents[0]|tojson }}, {{ file_contents[1]|tojson }});
+    };
+  </script>
+    {% endif %}
+{% endblock %}

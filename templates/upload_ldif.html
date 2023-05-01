@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Upload LDIF{% endblock %}
+
+{% block content %}
+    <h1>Upload LDIF</h1>
+    <form action="{{ url_for('upload_ldif') }}" method="POST" enctype="multipart/form-data">
+        <div class="form-group">
+            <label for="ldif_file1">LDIF File 1:</label>
+            <input type="file" name="ldif_file1" id="ldif_file1" required>
+        </div>
+        <div class="form-group">
+            <label for="ldif_file2">LDIF File 2:</label>
+            <input type="file" name="ldif_file2" id="ldif_file2" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Upload and Compare</button>
+    </form>
+{% endblock %}
